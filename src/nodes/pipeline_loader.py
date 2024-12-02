@@ -10,7 +10,7 @@ from ..idm_vton.unet_hacked_tryon import UNet2DConditionModel
 from ..idm_vton.unet_hacked_garmnet import UNet2DConditionModel as UNet2DConditionModel_ref
 from ..idm_vton.tryon_pipeline import StableDiffusionXLInpaintPipeline as TryonPipeline
 from comfy.model_management import get_torch_device
-from ...install import WEIGHTS_PATH
+from ...install import WEIGHTS_PATH, WEIGHTS_PATH_2
 
 
 DEVICE = get_torch_device()
@@ -43,11 +43,18 @@ class PipelineLoader:
             subfolder="scheduler"
         )
         
-        vae = AutoencoderKL.from_pretrained(
-            WEIGHTS_PATH,
-            subfolder="vae",
-            torch_dtype=weight_dtype
-        ).requires_grad_(False).eval().to(DEVICE)
+        if weight_dtype == torch.float16:
+            vae = AutoencoderKL.from_pretrained(
+                WEIGHTS_PATH_2,
+                subfolder="vae",
+                torch_dtype=weight_dtype
+            ).requires_grad_(False).eval().to(DEVICE)
+        else:
+            vae = AutoencoderKL.from_pretrained(
+                WEIGHTS_PATH,
+                subfolder="vae",
+                torch_dtype=weight_dtype
+            ).requires_grad_(False).eval().to(DEVICE)
         
         unet = UNet2DConditionModel.from_pretrained(
             WEIGHTS_PATH,

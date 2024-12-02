@@ -8,9 +8,12 @@ from folder_paths import models_dir
 
 CUSTOM_NODES_PATH = os.path.dirname(os.path.abspath(__file__))
 WEIGHTS_PATH = os.path.join(models_dir, "IDM-VTON")
+WEIGHTS_PATH_2 = os.path.join(models_dir, "sdxl-vae-fp16-fix")
 HF_REPO_ID = "yisol/IDM-VTON"
+HF_REPO_ID_2 = "madebyollin/sdxl-vae-fp16-fix"
 
 os.makedirs(WEIGHTS_PATH, exist_ok=True)
+os.makedirs(WEIGHTS_PATH_2, exist_ok=True)
 
 def build_pip_install_cmds(args):
     if "python_embeded" in sys.executable or "python_embedded" in sys.executable:
@@ -19,10 +22,11 @@ def build_pip_install_cmds(args):
         return [sys.executable, '-m', 'pip', 'install'] + args
 
 def ensure_package():
-    cmds = build_pip_install_cmds(['-r', 'requirements.txt'])
+    cmds = build_pip_install_cmds(['-r', os.path.join(CUSTOM_NODES_PATH, 'requirements.txt')])
     subprocess.run(cmds, cwd=CUSTOM_NODES_PATH)
 
 
 if __name__ == "__main__":
     ensure_package()
     snapshot_download(repo_id=HF_REPO_ID, local_dir=WEIGHTS_PATH, local_dir_use_symlinks=False)
+    snapshot_download(repo_id=HF_REPO_ID_2, local_dir=WEIGHTS_PATH_2, local_dir_use_symlinks=False)
