@@ -23,13 +23,14 @@ class IDM_VTON:
                 "garment_img": ("IMAGE",),
                 "garment_description": ("STRING", {"multiline": True, "dynamicPrompts": True}),
                 "negative_prompt": ("STRING", {"multiline": True, "dynamicPrompts": True}),
-                "width": ("INT", {"default": 768, "min": 0, "max": MAX_RESOLUTION}),
-                "height": ("INT", {"default": 1024, "min": 0, "max": MAX_RESOLUTION}),
+                "width": ("INT", {"default": 768, "min": 0, "max": MAX_RESOLUTION} , {"forceInput": True}),
+                "height": ("INT", {"default": 1024, "min": 0, "max": MAX_RESOLUTION}, {"forceInput": True}),
                 "num_inference_steps": ("INT", {"default": 30}),
                 "guidance_scale": ("FLOAT", {"default": 2.0}),
                 "strength": ("FLOAT", {"default": 1.0}),
                 "seed": ("INT", {"default": 42, "min": 0, "max": 0xffffffffffffffff}),
             }
+            
         }
     
     RETURN_TYPES = ("IMAGE", "MASK")
