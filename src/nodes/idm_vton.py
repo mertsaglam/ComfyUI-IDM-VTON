@@ -29,6 +29,11 @@ class IDM_VTON:
                 "guidance_scale": ("FLOAT", {"default": 2.0}),
                 "strength": ("FLOAT", {"default": 1.0}),
                 "seed": ("INT", {"default": 42, "min": 0, "max": 0xffffffffffffffff}),
+            },
+            "optional" : {
+                "width_input": ("INT", { "forceInput": True}),
+                "height_input": ("INT", { "forceInput": True}),
+                
             }
             
         }
@@ -37,7 +42,11 @@ class IDM_VTON:
     FUNCTION = "make_inference"
     CATEGORY = "ComfyUI-IDM-VTON"
     
-    def preprocess_images(self, human_img, garment_img, pose_img, mask_img, height, width):
+    def preprocess_images(self, human_img, garment_img, pose_img, mask_img, height, width, width_input=None, height_input=None):
+        if width_input is not None:
+            width = width_input
+        if height_input is not None:
+            height = height_input
         human_img = human_img.squeeze().permute(2,0,1)
         garment_img = garment_img.squeeze().permute(2,0,1)
         pose_img = pose_img.squeeze().permute(2,0,1)
@@ -55,8 +64,12 @@ class IDM_VTON:
         
         return human_img, garment_img, pose_img, mask_img
     
-    def make_inference(self, pipeline, human_img, garment_img, pose_img, mask_img, height, width, garment_description, negative_prompt, num_inference_steps, strength, guidance_scale, seed):
-        human_img, garment_img, pose_img, mask_img = self.preprocess_images(human_img, garment_img, pose_img, mask_img, height, width)
+    def make_inference(self, pipeline, human_img, garment_img, pose_img, mask_img, height, width, garment_description, negative_prompt, num_inference_steps, strength, guidance_scale, seed,width_input=None, height_input=None):
+        human_img, garment_img, pose_img, mask_img = self.preprocess_images(human_img, garment_img, pose_img, mask_img, height, width, width_input, height_input)
+        if width_input is not None:
+            width = width_input
+        if height_input is not None:
+            height = height_input
         tensor_transfrom = transforms.Compose(
             [
                 transforms.ToTensor(),
