@@ -29,12 +29,10 @@ class IDM_VTON:
                 "guidance_scale": ("FLOAT", {"default": 2.0}),
                 "strength": ("FLOAT", {"default": 1.0}),
                 "seed": ("INT", {"default": 42, "min": 0, "max": 0xffffffffffffffff}),
-            },
-            "optional" : {
                 "width_input": ("INT", { "forceInput": True}),
                 "height_input": ("INT", { "forceInput": True}),
-                
-            }
+            },
+            
             
         }
     
